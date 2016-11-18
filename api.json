@@ -1,0 +1,124 @@
+{
+  "name": "akk-cluster-api-test",
+  "description": "Test api to prove akka clusters for resource groups",
+  "base_url": "http://localhost:9000",
+  "info": {
+    "contact": {
+      "name": "Joe Bloggs",
+      "email": "joe@blogs.com"
+    }
+  },
+  "apidoc": {
+    "version": "0.9.30"
+  },
+  "models": {
+    "healthcheck":{
+      "fields": [
+        {"name":"name", "type": "string"}
+      ]
+    },
+    "session" : {
+      "fields" : [
+        { "name": "guid", "type" : "uuid" },
+        { "name": "user", "type" : "string" },
+        { "name": "shipping_address", "type" : "string" },
+        { "name": "payment_methods", "type" : "string" },
+        { "name" : "items", "type" : "[item]"},
+        { "name" : "order", "type" : "string"}
+      ]
+    },
+    "address" : {
+      "fields" : [
+        { "name": "guid", "type" : "uuid" },
+        { "name": "name", "type" : "string" }
+      ]
+    },
+    "payment_method" : {
+      "fields" : [
+        { "name": "guid", "type" : "uuid" },
+        { "name": "name", "type" : "string" }
+      ]
+    },
+    "item" : {
+      "fields" : [
+        { "name": "guid", "type" : "uuid" },
+        { "name": "name", "type" : "string" }
+      ]
+    },
+    "order": {
+      "fields" : [
+        { "name": "guid", "type" : "uuid" },
+        { "name": "name", "type" : "string" }
+      ]
+    }
+  },
+  "resources": {
+    "healthcheck":{
+      "path": "/healthcheck",
+      "operations": [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "healthcheck"
+            }
+          }
+        }
+      ]
+    },
+    "session" : {
+      "path": "/session",
+      "operations": [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "session"
+            }
+          }
+        }
+      ]
+    },
+    "address" : {
+      "path": "/session/:uuid/addresses",
+      "operations" : [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "[address]"
+            }
+          }
+        }
+      ]
+    },
+    "payment_method" : {
+      "path": "/session/:uuid/payment_methods",
+      "operations" : [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "[payment_method]"
+            }
+          }
+        }
+      ]
+    },
+    "order" : {
+      "path" : "/sessions/:uuid/order",
+      "operations" : [
+        {
+          "method": "GET",
+          "responses" : {
+            "200" : {
+              "type": "order"
+            }
+          }
+        }
+      ]
+    }
+
+  }
+
+}
