@@ -12,7 +12,6 @@ class RuntimeModule extends AbstractModule {
 
   override def configure(): Unit = {
 
-    bind(classOf[Init]).asEagerSingleton()
     bind(classOf[SessionService]).asEagerSingleton()
   }
 

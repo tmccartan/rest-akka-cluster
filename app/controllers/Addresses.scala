@@ -22,13 +22,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class Addresses @Inject () (val addressService: AddressService) extends BaseController {
 
   implicit val timeout = Timeout(10.seconds)
-  val addressActorRef = system.actorOf(Props(new ShippingAddressActor(addressService)))
 
-  def get(uuid: String) = Action.async { request =>
-    val res = ask(addressActorRef, ShippingAddressMessage).mapTo[Seq[Address]]
-
-    res.map(address => {
-        Results.Ok(Json.toJson(address))
-    })
+  def get(uuid: String) = Action { request =>
+    Ok
   }
 }

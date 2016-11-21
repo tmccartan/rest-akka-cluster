@@ -9,7 +9,7 @@ class AkkaConfig(hostname: Option[String]) {
 
   private final val Log = LogFactory.getLog(this.getClass)
   private final val AkkaPort = 2551
-  private final val Localhost = "localhost"
+  private final val Localhost = "127.0.0.1"
 
   private val (host: String, siblings: List[String]) = hostname match {
     //case Some(name) if name.length > 0 => (name, awsWrapper.getNodes("akka-cluster")) //need to ask aws for all nodes

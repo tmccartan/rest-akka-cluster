@@ -9,20 +9,21 @@ import akka.actor.{ActorRef, Actor}
 
 import scala.concurrent.Future
 
-class SessionService  @Inject ()(val init: Init){
+class SessionService  {
 
   def get() : Future [Session] = {
 
     val guid = UUID.randomUUID()
-    val paymentLink = s"/session/$guid/payments_methods"
-    val shippingLink = s"/session/$guid/shipping_methods"
+    //build the urls for the slow resources so they can be loaded later on
+    val paymentLink = s"/session/$guid/payment_methods"
+    val shippingLink = s"/session/$guid/addresses"
     val orderLink = s"/session/$guid/order"
     val userLink = s"/session/$guid/user"
     val items = Seq.fill(10)(Item(UUID.randomUUID(), ""))
 
-    init.mainActor ! ResolveSession(guid)
+    Init.instance.mainActor ! ResolveSession(guid)
 
-    Future.successful(Session(guid, userLink, shippingLink, paymentLink,items, orderLink))
+    Future.successful(Session(guid, userLink, shippingLink, paymentLink, items, orderLink))
 
   }
 }
