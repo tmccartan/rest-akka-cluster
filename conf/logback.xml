@@ -26,4 +26,9 @@
 
   <logger name="play" level="INFO" />
   <logger name="application" level="INFO" />
+
+  <root level="DEBUG">
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </root>
 </configuration>

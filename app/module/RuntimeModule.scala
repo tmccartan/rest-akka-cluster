@@ -1,26 +1,12 @@
 package module
 
-import actors.{MainActor, AkkaConfig, Init}
-import akka.actor.{ActorRef, Props, ActorSystem}
-import akka.cluster.Cluster
-import com.google.inject.{Provides, AbstractModule}
-import service.{SessionService, AddressService, PaymentMethodService}
+import controllers._
+import scaldi.Module
 
-class RuntimeModule extends AbstractModule {
+class RuntimeModule extends Module  {
 
-
-
-  override def configure(): Unit = {
-
-    bind(classOf[SessionService]).asEagerSingleton()
-  }
-
-  @Provides
-  def providesAddressService :AddressService = {
-    new AddressService()
-  }
-  @Provides
-  def providesPaymentService :PaymentMethodService = {
-    new PaymentMethodService()
-  }
+  binding to injected[Session]
+  binding to injected[Addresses]
+  binding to injected[PaymentMethods]
+  binding to injected[Orders]
 }

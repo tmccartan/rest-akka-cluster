@@ -2,16 +2,15 @@ package service
 
 import java.util.UUID
 
-import actors.{Init, ResolveSession, MainActor}
+import actors.MainActorMessages.ResolveSession
 import com.gilt.akk.cluster.api.test.v0.models.{Item, Session}
-import com.google.inject.Inject
-import akka.actor.{ActorRef, Actor}
+import akka.actor.ActorRef
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class SessionService  {
+class SessionService(mainActor: ActorRef) {
 
-  def get() : Future [Session] = {
+  def get()(implicit ex: ExecutionContext) : Future [Session] = {
 
     val guid = UUID.randomUUID()
     //build the urls for the slow resources so they can be loaded later on
@@ -21,7 +20,7 @@ class SessionService  {
     val userLink = s"/session/$guid/user"
     val items = Seq.fill(10)(Item(UUID.randomUUID(), ""))
 
-    Init.instance.mainActor ! ResolveSession(guid)
+    mainActor ! ResolveSession(guid)
 
     Future.successful(Session(guid, userLink, shippingLink, paymentLink, items, orderLink))
 

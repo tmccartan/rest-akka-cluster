@@ -3,22 +3,24 @@ package actors
 import java.util.UUID
 
 import akka.actor.Actor
-import akka.pattern.pipe
 import com.gilt.akk.cluster.api.test.v0.models.{Address, PaymentMethod}
-import com.google.inject.Inject
 import service.{AddressService, PaymentMethodService}
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
-case class ResolveSession(uUID: UUID)
-case class PaymentMethods(uUID: UUID)
-case class AddressMethods(uUID: UUID)
+object SessionActorMessages {
+  case class ResolveSession(uUID: UUID)
+  case class PaymentMethods(uUID: UUID)
+  case class AddressMethods(uUID: UUID)
+}
 
-class SessionActor @Inject() (paymentMethodService: PaymentMethodService, shippingAddressService: AddressService) extends Actor {
+
+class SessionActor (paymentMethodService: PaymentMethodService, shippingAddressService: AddressService) extends Actor {
 
   var paymentMethods: Option[Future[Seq[PaymentMethod]]] = None
   var shippingAddresses: Option[Future[Seq[Address]]] = None
+  import SessionActorMessages._
+  implicit val ec: ExecutionContext = context.dispatcher
 
   override def receive : Receive = {
 
@@ -30,22 +32,21 @@ class SessionActor @Inject() (paymentMethodService: PaymentMethodService, shippi
       paymentMethods match {
         case Some(resolvedPaymentMethods) =>
           println("Served payment methods from actor result")
-          resolvedPaymentMethods pipeTo sender
+           sender ! resolvedPaymentMethods
 
         case None =>
           println("Getting payment methods")
-          paymentMethodService.getAll() pipeTo sender
-
+          sender ! paymentMethodService.getAll()
       }
 
     case AddressMethods(uuid) =>
       shippingAddresses match {
         case Some(resolvedShippingAddresses) =>
           println("Served addresses from actor result")
-          resolvedShippingAddresses pipeTo sender
+          sender ! resolvedShippingAddresses
         case None =>
           println("Getting addresses")
-          shippingAddressService.getAll() pipeTo sender
+          sender ! shippingAddressService.getAll()
       }
 
   }

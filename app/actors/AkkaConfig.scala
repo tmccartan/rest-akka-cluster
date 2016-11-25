@@ -16,7 +16,7 @@ class AkkaConfig(hostname: Option[String]) {
     case _ => (Localhost, List(Localhost))
   }
 
-  private val seeds = siblings map (ip => s"akka.tcp://scheduler@$ip:$AkkaPort")
+  private val seeds = siblings map (ip => s"akka.tcp://rest-akka-cluster@$ip:$AkkaPort")
   Log.warn(s"Seeds: ${seeds.mkString}")
 
   private val overrideConfig = ConfigFactory.empty()
