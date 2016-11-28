@@ -7,3 +7,5 @@ GET     /sessions/:uuid/order              @controllers.Orders.get(uuid: String)
 GET     /session/:uuid/payment_methods     @controllers.PaymentMethods.get(uuid: String)
 GET     /session                           @controllers.Session.get()
 GET     /healthcheck                       @controllers.Healthcheck.get()
+
+POST     /graphql                          graphql.GraphQLController.graphql(query : Option[String], variables: Option[String], operation: Option[String])
